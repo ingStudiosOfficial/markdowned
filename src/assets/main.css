@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
+
+html,
+body {
+	padding: 0;
+	margin: 0;
+	width: 100svw;
+	height: 100svh;
+}
+
+body {
+	font-family: 'Noto Sans Mono';
+	--body-1: normal 14px/24px 'Noto Sans Mono';
+	--body-2: normal 12px/16px 'Noto Sans Mono';
+	--header-1: bold 16px/24px 'Noto Sans Mono';
+	--header-2: bold 14px/24px 'Noto Sans Mono';
+}

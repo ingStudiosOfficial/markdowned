@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "@kor-ui/kor": "^1.11.3",
-    "@mlc-ai/web-llm": "^0.2.84",
     "marked": "^18.0.5",
     "pinia": "^3.0.4",
     "vue": "^3.5.38",

@@ -2,19 +2,16 @@
 import { useAgent } from '@/stores/agent';
 import { useCode } from '@/stores/code';
 import type { korInput } from '@kor-ui/kor';
-import type { InitProgressReport } from '@mlc-ai/web-llm';
 import { storeToRefs } from 'pinia';
-import { ref, useTemplateRef } from 'vue';
+import { useTemplateRef } from 'vue';
 
 const codeStore = useCode();
 const agentStore = useAgent();
 
 const { code } = storeToRefs(codeStore);
-const { history, mlcEngine } = storeToRefs(agentStore);
+const { history } = storeToRefs(agentStore);
 
 const promptBox = useTemplateRef<korInput>('promptBox');
-const creatingEngine = ref<boolean>(false);
-const progReport = ref<InitProgressReport | null>(null);
 
 async function onSend() {
 	if (!promptBox.value || promptBox.value.value === '') return;
@@ -24,11 +21,6 @@ async function onSend() {
 		role: 'user',
 		content: promptBox.value.value || '',
 	});
-
-	if (!mlcEngine) {
-		creatingEngine.value = true;
-		await agentStore.createMlcEngine(mlcCallback);
-	}
 
 	history.value.push({
 		id: crypto.randomUUID(),
@@ -41,10 +33,6 @@ async function onSend() {
 	promptBox.value.value = '';
 }
 
-function mlcCallback(prog: InitProgressReport) {
-	progReport.value = prog;
-}
-
 function onChunk(chunk: string) {
 	history.value[history.value.length - 1]!.content += chunk;
 }
@@ -52,15 +40,7 @@ function onChunk(chunk: string) {
 
 <template>
 	<div class="content">
-		<div v-if="creatingEngine && progReport" class="creating-loader">
-			<kor-progress-bar
-				radial
-				:value="progReport.progress"
-				:label="progReport.text"
-				:info="`${progReport.progress}% done (${progReport.timeElapsed} elapsed)`"
-			></kor-progress-bar>
-		</div>
-		<div v-else v-for="item in history" :key="item.id">
+		<div v-for="item in history" :key="item.id">
 			<b>{{ item.role }}</b>
 			<p>{{ item.content }}</p>
 		</div>

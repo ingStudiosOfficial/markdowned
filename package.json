@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@kor-ui/kor": "^1.11.3",
+    "marked": "^18.0.5",
     "pinia": "^3.0.4",
     "vue": "^3.5.38",
     "vue-router": "^5.1.0"

@@ -34,7 +34,7 @@ const { code } = storeToRefs(codeStore);
 	height: 100%;
 	box-sizing: border-box;
 	font-size: 1rem;
-	padding: 10px;
+	padding: 8px;
 	white-space: pre-wrap;
 	word-wrap: break-word;
 	line-height: 1.5;

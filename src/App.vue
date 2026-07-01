@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router';
+import { RouterView, useRoute } from 'vue-router';
+import router from './router';
+
+const route = useRoute();
 </script>
 
 <template>
@@ -7,7 +10,11 @@ import { RouterView } from 'vue-router';
 		<kor-app-bar slot="top" label="markdowned"></kor-app-bar>
 		<kor-nav-bar slot="top">
 			<kor-tabs>
-				<kor-tab-item label="Editor"></kor-tab-item>
+				<kor-tab-item
+					label="Editor"
+					:active="route.name === 'editor'"
+					@click="router.push('/editor')"
+				></kor-tab-item>
 			</kor-tabs>
 		</kor-nav-bar>
 		<RouterView></RouterView>

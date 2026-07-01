@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import { createGroq, type GroqProvider } from '@ai-sdk/groq';
+import { streamText } from 'ai';
 
 interface ConversationHistoryItem {
 	id: string;
@@ -10,29 +12,28 @@ interface ConversationHistoryItem {
 export const useAgent = defineStore('agent', () => {
 	const history = ref<ConversationHistoryItem[]>([]);
 	const groqApiKey = ref<string | null>(null);
+	const groq = ref<GroqProvider | null>(null);
 
 	async function promptStreaming(onChunk: (chunk: string) => void): Promise<string> {
-		/*
-		if (!mlcEngine.value) throw new Error('mlc engine is null');
+		if (!groq.value) throw new Error('groq not initialized');
 
-		const chunks = await mlcEngine.value.chat.completions.create({
+		const result = streamText({
+			model: groq.value('llama-3.1-8b-instant'),
 			messages: history.value,
-			temperature: 1,
-			stream: true,
-			stream_options: { include_usage: true },
 		});
 
-		for await (const chunk of chunks as AsyncIterable<ChatCompletionChunk>) {
-			onChunk(chunk.choices[0]?.delta.content || '');
+		for await (const chunk of result.textStream) {
+			onChunk(chunk);
 		}
 
-		const fullReply = await mlcEngine.value.getMessage();
-
-		return fullReply;
-		*/
-
-		return 'uwu';
+		return result.output;
 	}
 
-	return { history, promptStreaming };
+	function initGroq() {
+		if (!groqApiKey.value) throw new Error('groq api key missing');
+
+		groq.value = createGroq({ apiKey: groqApiKey.value });
+	}
+
+	return { history, groqApiKey, promptStreaming, initGroq };
 });

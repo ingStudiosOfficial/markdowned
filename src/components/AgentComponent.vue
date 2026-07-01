@@ -4,12 +4,16 @@ import { useCode } from '@/stores/code';
 import type { korInput } from '@kor-ui/kor';
 import { storeToRefs } from 'pinia';
 import { useTemplateRef } from 'vue';
+import ApiDialog from './dialogs/ApiDialog.vue';
+import { useDialog } from '@/composables/dialog.ts';
 
 const codeStore = useCode();
 const agentStore = useAgent();
 
+const { apiDialog } = useDialog();
+
 const { code } = storeToRefs(codeStore);
-const { history } = storeToRefs(agentStore);
+const { history, groqApiKey } = storeToRefs(agentStore);
 
 const promptBox = useTemplateRef<korInput>('promptBox');
 
@@ -36,19 +40,40 @@ async function onSend() {
 function onChunk(chunk: string) {
 	history.value[history.value.length - 1]!.content += chunk;
 }
+
+function toggleApiDialog() {
+	if (!apiDialog.value) return;
+
+	apiDialog.value.visible = !apiDialog.value.visible;
+}
 </script>
 
 <template>
-	<div class="content">
-		<div v-for="item in history" :key="item.id">
+	<kor-icon icon="settings" slot="functions" :button="true" @click="toggleApiDialog()"></kor-icon>
+	<div
+		class="content"
+		:style="{
+			alignItems: !groqApiKey ? 'center' : 'flex-start',
+			justifyContent: !groqApiKey ? 'center' : 'flex-start',
+		}"
+	>
+		<kor-empty-state
+			v-if="!groqApiKey"
+			label="Provide a Groq API key to get started"
+			icon="assistant"
+		>
+		</kor-empty-state>
+		<div v-else v-for="item in history" :key="item.id">
 			<b>{{ item.role }}</b>
 			<p>{{ item.content }}</p>
 		</div>
 	</div>
-	<div class="footer" slot="footer">
+	<div v-if="groqApiKey" class="footer" slot="footer">
 		<kor-input ref="promptBox" label="Ask Markdown Agent" @keydown.enter="onSend()"></kor-input>
 		<kor-button icon="send" color="primary" @click="onSend()"></kor-button>
 	</div>
+
+	<ApiDialog></ApiDialog>
 </template>
 
 <style scoped>

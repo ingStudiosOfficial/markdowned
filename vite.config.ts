@@ -15,33 +15,10 @@ export default defineConfig({
 			},
 		}),
 		vueDevTools(),
-		{
-			name: 'ignore-web-llm',
-			transform(code, id) {
-				if (id.includes('@mlc-ai/web-llm') || id.includes('web-llm')) {
-					return { code: 'export default {};', map: null };
-				}
-			},
-		},
 	],
 	resolve: {
 		alias: {
 			'@': fileURLToPath(new URL('./src', import.meta.url)),
-		},
-	},
-	optimizeDeps: {
-		exclude: ['@mlc-ai/web-llm', 'web-llm'],
-		esbuildOptions: {
-			target: 'esnext',
-			supported: {
-				'top-level-await': true,
-			},
-		},
-	},
-	build: {
-		target: 'esnext',
-		rollupOptions: {
-			external: ['@mlc-ai/web-llm', 'web-llm'],
 		},
 	},
 });

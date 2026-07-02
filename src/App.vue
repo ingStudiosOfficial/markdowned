@@ -3,8 +3,11 @@ import { RouterView, useRoute } from 'vue-router';
 import router from './router';
 import { useSettings } from './composables/settings';
 import { onMounted } from 'vue';
+import { useCode } from './stores/code';
 
 const route = useRoute();
+
+const { exportCode, importCode } = useCode();
 
 const { getAndSetSettings } = useSettings();
 
@@ -15,7 +18,22 @@ onMounted(async () => {
 
 <template>
 	<kor-page class="page">
-		<kor-app-bar slot="top" label="markdowned"></kor-app-bar>
+		<kor-app-bar slot="top" label="markdowned">
+			<kor-button
+				slot="functions"
+				label="Import"
+				icon="file_upload"
+				color="secondary"
+				@click="importCode()"
+			></kor-button>
+			<kor-button
+				slot="functions"
+				label="Export"
+				icon="file_download"
+				color="primary"
+				@click="exportCode()"
+			></kor-button>
+		</kor-app-bar>
 		<kor-nav-bar slot="top">
 			<kor-tabs>
 				<kor-tab-item

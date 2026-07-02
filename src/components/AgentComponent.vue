@@ -8,6 +8,7 @@ import ApiDialog from './dialogs/ApiDialog.vue';
 import { useDialog } from '@/composables/dialog.ts';
 import { useSettings } from '@/composables/settings.ts';
 import { marked } from 'marked';
+import DOMPurify from 'dompurify';
 
 const codeStore = useCode();
 const agentStore = useAgent();
@@ -39,8 +40,8 @@ async function onSend() {
 	promptBox.value.value = '';
 
 	try {
-		history.value[history.value.length - 1]!.content = await marked.parse(
-			await agentStore.promptStreaming(onChunk),
+		history.value[history.value.length - 1]!.content = DOMPurify.sanitize(
+			await marked.parse(await agentStore.promptStreaming(onChunk)),
 		);
 	} catch (error) {
 		console.error('Error while prompt streaming:', error);
@@ -77,7 +78,7 @@ function toggleApiDialog() {
 		</kor-empty-state>
 		<div v-else v-for="item in history" :key="item.id">
 			<b>{{ item.role }}</b>
-			<div v-html="item.content"></div>
+			<div class="item-content" v-html="item.content"></div>
 		</div>
 	</div>
 	<div v-if="groqApiKey" class="footer" slot="footer">
@@ -86,7 +87,7 @@ function toggleApiDialog() {
 	</div>
 
 	<kor-modal :visible="generateError" sticky="true" icon="error" label="Error">
-		<p>{{ generateError }}</p>
+		<p>{{ generateError }} (hint: try checking if your API key is valid)</p>
 		<kor-button label="OK" icon="done" slot="footer" @click="generateError = null"></kor-button>
 	</kor-modal>
 
@@ -116,5 +117,9 @@ function toggleApiDialog() {
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
+}
+
+.item-content {
+	word-break: break-all;
 }
 </style>

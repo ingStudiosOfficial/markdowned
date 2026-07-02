@@ -25,6 +25,7 @@ export const useCode = defineStore('code', () => {
 	async function importCode() {
 		fileUploadInput = document.createElement('input');
 		fileUploadInput.type = 'file';
+		fileUploadInput.accept = '.md';
 
 		fileUploadInput.click();
 

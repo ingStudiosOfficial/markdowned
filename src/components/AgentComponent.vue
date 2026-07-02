@@ -3,19 +3,23 @@ import { useAgent } from '@/stores/agent';
 import { useCode } from '@/stores/code';
 import type { korInput } from '@kor-ui/kor';
 import { storeToRefs } from 'pinia';
-import { useTemplateRef } from 'vue';
+import { ref, useTemplateRef } from 'vue';
 import ApiDialog from './dialogs/ApiDialog.vue';
 import { useDialog } from '@/composables/dialog.ts';
+import { useSettings } from '@/composables/settings.ts';
+import { marked } from 'marked';
 
 const codeStore = useCode();
 const agentStore = useAgent();
 
 const { apiDialog } = useDialog();
+const { settings } = useSettings();
 
 const { code } = storeToRefs(codeStore);
 const { history, groqApiKey } = storeToRefs(agentStore);
 
 const promptBox = useTemplateRef<korInput>('promptBox');
+const generateError = ref<string | null>(null);
 
 async function onSend() {
 	if (!promptBox.value || promptBox.value.value === '') return;
@@ -32,9 +36,17 @@ async function onSend() {
 		content: '',
 	});
 
-	agentStore.promptStreaming(onChunk);
-
 	promptBox.value.value = '';
+
+	try {
+		history.value[history.value.length - 1]!.content = await marked.parse(
+			await agentStore.promptStreaming(onChunk),
+		);
+	} catch (error) {
+		console.error('Error while prompt streaming:', error);
+		generateError.value = (error as Error).message;
+		return;
+	}
 }
 
 function onChunk(chunk: string) {
@@ -65,13 +77,18 @@ function toggleApiDialog() {
 		</kor-empty-state>
 		<div v-else v-for="item in history" :key="item.id">
 			<b>{{ item.role }}</b>
-			<p>{{ item.content }}</p>
+			<div v-html="item.content"></div>
 		</div>
 	</div>
 	<div v-if="groqApiKey" class="footer" slot="footer">
 		<kor-input ref="promptBox" label="Ask Markdown Agent" @keydown.enter="onSend()"></kor-input>
 		<kor-button icon="send" color="primary" @click="onSend()"></kor-button>
 	</div>
+
+	<kor-modal :visible="generateError" sticky="true" icon="error" label="Error">
+		<p>{{ generateError }}</p>
+		<kor-button label="OK" icon="done" slot="footer" @click="generateError = null"></kor-button>
+	</kor-modal>
 
 	<ApiDialog></ApiDialog>
 </template>

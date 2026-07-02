@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { createGroq, type GroqProvider } from '@ai-sdk/groq';
 import { streamText } from 'ai';
+import { useSettings } from '@/composables/settings';
 
 interface ConversationHistoryItem {
 	id: string;
@@ -10,15 +11,24 @@ interface ConversationHistoryItem {
 }
 
 export const useAgent = defineStore('agent', () => {
+	const { settings } = useSettings();
+
 	const history = ref<ConversationHistoryItem[]>([]);
-	const groqApiKey = ref<string | null>(null);
+	const groqApiKey = computed(() => settings.value?.groqApiKey || null);
 	const groq = ref<GroqProvider | null>(null);
 
 	async function promptStreaming(onChunk: (chunk: string) => void): Promise<string> {
-		if (!groq.value) throw new Error('groq not initialized');
+		if (!groq.value) {
+			try {
+				initGroq();
+			} catch (error) {
+				console.error(error);
+				throw error;
+			}
+		}
 
 		const result = streamText({
-			model: groq.value('llama-3.1-8b-instant'),
+			model: groq.value!('llama-3.1-8b-instant'),
 			messages: history.value,
 		});
 
@@ -26,11 +36,11 @@ export const useAgent = defineStore('agent', () => {
 			onChunk(chunk);
 		}
 
-		return result.output;
+		return await result.text;
 	}
 
 	function initGroq() {
-		if (!groqApiKey.value) throw new Error('groq api key missing');
+		if (!groqApiKey.value) throw new Error('api key not set');
 
 		groq.value = createGroq({ apiKey: groqApiKey.value });
 	}

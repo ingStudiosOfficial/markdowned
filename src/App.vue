@@ -1,8 +1,16 @@
 <script setup lang="ts">
 import { RouterView, useRoute } from 'vue-router';
 import router from './router';
+import { useSettings } from './composables/settings';
+import { onMounted } from 'vue';
 
 const route = useRoute();
+
+const { getAndSetSettings } = useSettings();
+
+onMounted(async () => {
+	await getAndSetSettings();
+});
 </script>
 
 <template>

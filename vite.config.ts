@@ -48,6 +48,8 @@ export default defineConfig({
 						action: '/',
 						accept: {
 							'text/markdown': ['.md'],
+							'text/plain': ['.txt'],
+							'text/html': ['.html', '.htm'],
 						},
 						launch_type: 'multiple-clients',
 						// eslint-disable-next-line @typescript-eslint/no-explicit-any

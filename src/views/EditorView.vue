@@ -32,25 +32,23 @@ const mobileViewMode = ref<'editor' | 'preview' | 'agent'>('editor');
 		<kor-pane v-show="mobileViewMode === 'agent'" slot="left" class="mobile-pane">
 			<AgentComponent></AgentComponent>
 		</kor-pane>
-		<kor-nav-bar class="mobile-nav-bar" slot="bottom">
-			<kor-tabs style="justify-content: center; width: 100svw">
-				<kor-tab-item
-					label="Editor"
-					:active="mobileViewMode === 'editor'"
-					@click="mobileViewMode = 'editor'"
-				></kor-tab-item>
-				<kor-tab-item
-					label="Preview"
-					:active="mobileViewMode === 'preview'"
-					@click="mobileViewMode = 'preview'"
-				></kor-tab-item>
-				<kor-tab-item
-					label="Agent"
-					:active="mobileViewMode === 'agent'"
-					@click="mobileViewMode = 'agent'"
-				></kor-tab-item>
-			</kor-tabs>
-		</kor-nav-bar>
+		<kor-tabs slot="bottom" style="justify-content: center; width: 100svw">
+			<kor-tab-item
+				label="Editor"
+				:active="mobileViewMode === 'editor'"
+				@click="mobileViewMode = 'editor'"
+			></kor-tab-item>
+			<kor-tab-item
+				label="Preview"
+				:active="mobileViewMode === 'preview'"
+				@click="mobileViewMode = 'preview'"
+			></kor-tab-item>
+			<kor-tab-item
+				label="Agent"
+				:active="mobileViewMode === 'agent'"
+				@click="mobileViewMode = 'agent'"
+			></kor-tab-item>
+		</kor-tabs>
 	</template>
 </template>
 

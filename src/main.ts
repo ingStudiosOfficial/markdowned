@@ -25,6 +25,8 @@ if ('launchQueue' in window) {
 
 		const file = await (handle as FileSystemFileHandle).getFile();
 		codeStore.code = await file.text();
+		codeStore.filename = file.name;
+
 		router.replace({ name: 'editor' });
 	});
 }

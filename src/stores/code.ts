@@ -3,19 +3,19 @@ import { ref } from 'vue';
 
 export const useCode = defineStore('code', () => {
 	const code = ref<string>('');
+	const filename = ref<string>(`${Date.now()}.md`);
 
 	let fileUploadInput: HTMLInputElement | null = null;
 
 	function exportCode() {
-		const filename = `${Date.now()}.md`;
-		const file = new File([code.value], filename, {
+		const file = new File([code.value], filename.value, {
 			type: 'text/markdown',
 		});
 		const url = URL.createObjectURL(file);
 
 		const a = document.createElement('a');
 		a.href = url;
-		a.download = filename;
+		a.download = filename.value;
 		a.click();
 
 		a.remove();
@@ -25,7 +25,7 @@ export const useCode = defineStore('code', () => {
 	async function importCode() {
 		fileUploadInput = document.createElement('input');
 		fileUploadInput.type = 'file';
-		fileUploadInput.accept = '.md';
+		fileUploadInput.accept = '.md, .txt, .html';
 
 		fileUploadInput.click();
 
@@ -40,9 +40,11 @@ export const useCode = defineStore('code', () => {
 
 		code.value = await file.text();
 
+		filename.value = file.name;
+
 		fileUploadInput?.removeEventListener('input', onUpload);
 		fileUploadInput?.remove();
 	}
 
-	return { code, exportCode, importCode };
+	return { code, filename, exportCode, importCode };
 });

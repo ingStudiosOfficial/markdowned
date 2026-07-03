@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useCode } from '@/stores/code';
 import { storeToRefs } from 'pinia';
-import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, useTemplateRef } from 'vue';
 
 const codeStore = useCode();
 

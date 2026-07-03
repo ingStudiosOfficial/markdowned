@@ -4,12 +4,14 @@ import router from './router';
 import { useSettings } from './composables/settings';
 import { onMounted } from 'vue';
 import { useCode } from './stores/code';
+import { useMobile } from './composables/mobile';
 
 const route = useRoute();
 
 const { exportCode, importCode } = useCode();
 
 const { getAndSetSettings } = useSettings();
+const { isMobile } = useMobile();
 
 onMounted(async () => {
 	await getAndSetSettings();
@@ -18,7 +20,7 @@ onMounted(async () => {
 
 <template>
 	<kor-page class="page">
-		<kor-app-bar slot="top" label="markdowned">
+		<kor-app-bar class="main-app-bar" slot="top" label="markdowned">
 			<kor-button
 				slot="functions"
 				label="Import"
@@ -34,7 +36,7 @@ onMounted(async () => {
 				@click="exportCode()"
 			></kor-button>
 		</kor-app-bar>
-		<kor-nav-bar slot="top">
+		<kor-nav-bar v-if="!isMobile" slot="top">
 			<kor-tabs>
 				<kor-tab-item
 					label="Editor"

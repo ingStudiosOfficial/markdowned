@@ -28,6 +28,8 @@ coverage
 
 .eslintcache
 
+dev-dist/
+
 # Cypress
 /cypress/videos/
 /cypress/screenshots/

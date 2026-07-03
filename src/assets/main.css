@@ -14,5 +14,6 @@ body {
 	--body-2: normal 12px/16px 'Noto Sans Mono';
 	--header-1: bold 16px/24px 'Noto Sans Mono';
 	--header-2: bold 14px/24px 'Noto Sans Mono';
-	--accent-1-rgb: rgb(108, 114, 222);
+	--accent-1-rgb: rgb(60, 100, 240);
+	--base-1-rgb: rgb(0, 0, 0);
 }

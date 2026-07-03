@@ -26,5 +26,8 @@ watch(code, async (newValue) => {
 	outline: none;
 	border: none;
 	font-family: 'Noto Serif';
+	width: 100%;
+	height: 100%;
+	word-break: break-all;
 }
 </style>

@@ -1,22 +1,17 @@
 <script setup lang="ts">
 import { useAgent } from '@/stores/agent';
-import { useCode } from '@/stores/code';
 import type { korInput } from '@kor-ui/kor';
 import { storeToRefs } from 'pinia';
 import { ref, useTemplateRef } from 'vue';
 import ApiDialog from './dialogs/ApiDialog.vue';
 import { useDialog } from '@/composables/dialog.ts';
-import { useSettings } from '@/composables/settings.ts';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 
-const codeStore = useCode();
 const agentStore = useAgent();
 
 const { apiDialog } = useDialog();
-const { settings } = useSettings();
 
-const { code } = storeToRefs(codeStore);
 const { history, groqApiKey } = storeToRefs(agentStore);
 
 const promptBox = useTemplateRef<korInput>('promptBox');
@@ -109,6 +104,7 @@ function toggleApiDialog() {
 	flex-direction: column;
 	width: 100%;
 	height: 100%;
+	word-break: break-all;
 }
 
 .creating-loader {

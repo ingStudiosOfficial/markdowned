@@ -47,7 +47,7 @@ Markdown document context: ${code.value}
 
 Use these tags to integrate with the system:
 $$add$$[content you want to add]^^add^^ - adds content to the end of the file
-$$clear$$^^clear^^ - clears the current content of the file
+$$clear$$^^clear^^ - clears the current content of the file (WARNING: DO NOT WRITE THIS IN YOUR RESPONSE UNLESS THE USER TELLS YOU TO DO SO.)
 
 Examples:
 

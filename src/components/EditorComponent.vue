@@ -54,7 +54,7 @@ onUnmounted(() => {
 		icon="backspace"
 		@click="hemingwayEnabled = !hemingwayEnabled"
 	></kor-button>
-	<kor-tooltip target="#hemingway" position="bottom"> Toggle Hemingway mode </kor-tooltip>
+	<kor-tooltip target="#hemingway" position="bottom">Toggle Hemingway mode</kor-tooltip>
 	<div class="editor">
 		<div ref="editorOverlay" class="editor-wrapper editor-overlay">
 			<pre

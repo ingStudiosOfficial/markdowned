@@ -1,3 +1,4 @@
+import { printOutput } from '@/utils/print';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
@@ -46,5 +47,13 @@ export const useCode = defineStore('code', () => {
 		fileUploadInput?.remove();
 	}
 
-	return { code, filename, exportCode, importCode };
+	async function printCode() {
+		await printOutput(code.value);
+	}
+
+	function rename(name: string) {
+		filename.value = name;
+	}
+
+	return { code, filename, exportCode, importCode, printCode, rename };
 });

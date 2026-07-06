@@ -29,7 +29,12 @@ onMounted(async () => {
 
 <template>
 	<kor-page class="page">
-		<kor-app-bar class="main-app-bar" slot="top" label="markdowned">
+		<kor-app-bar
+			class="main-app-bar"
+			slot="top"
+			:label="isMobile ? '' : 'markdowned'"
+			:logo="isMobile ? '/logo_full_trans.png' : ''"
+		>
 			<kor-button
 				id="rename-md"
 				slot="functions"

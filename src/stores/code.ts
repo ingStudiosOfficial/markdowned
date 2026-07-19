@@ -1,6 +1,8 @@
 import { printOutput } from '@/utils/print';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import mime from 'mime';
+import { shareMarkdown } from '@/utils/share';
 
 export const useCode = defineStore('code', () => {
 	const code = ref<string>('');
@@ -10,7 +12,7 @@ export const useCode = defineStore('code', () => {
 
 	function exportCode() {
 		const file = new File([code.value], filename.value, {
-			type: 'text/markdown',
+			type: mime.getType(filename.value) || 'text/markdown',
 		});
 		const url = URL.createObjectURL(file);
 
@@ -55,5 +57,9 @@ export const useCode = defineStore('code', () => {
 		filename.value = name;
 	}
 
-	return { code, filename, exportCode, importCode, printCode, rename };
+	async function share() {
+		await shareMarkdown(code.value, filename.value);
+	}
+
+	return { code, filename, exportCode, importCode, printCode, rename, share };
 });

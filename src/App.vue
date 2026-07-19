@@ -10,11 +10,13 @@ import { useDialog } from './composables/dialog.ts';
 
 const route = useRoute();
 
-const { exportCode, importCode, printCode: printMarkdown } = useCode();
+const { exportCode, importCode, printCode: printMarkdown, share } = useCode();
 
 const { getAndSetSettings } = useSettings();
 const { isMobile } = useMobile();
 const { nameDialog } = useDialog();
+
+const canShare = 'share' in navigator;
 
 function toggleDialog() {
 	if (nameDialog.value) {
@@ -50,6 +52,14 @@ onMounted(async () => {
 				@click="printMarkdown()"
 			></kor-button>
 			<kor-button
+				v-if="canShare"
+				id="share-md"
+				slot="functions"
+				icon="share"
+				color="tertiary"
+				@click="share()"
+			></kor-button>
+			<kor-button
 				slot="functions"
 				label="Import"
 				icon="file_upload"
@@ -64,6 +74,7 @@ onMounted(async () => {
 				@click="exportCode()"
 			></kor-button>
 		</kor-app-bar>
+		<kor-tooltip target="#share-md" position="bottom">Share Markdown document</kor-tooltip>
 		<kor-tooltip target="#print-md" position="bottom">Print Markdown document</kor-tooltip>
 		<kor-tooltip target="#rename-md" position="bottom">Rename Markdown document</kor-tooltip>
 		<kor-nav-bar v-if="!isMobile" slot="top">

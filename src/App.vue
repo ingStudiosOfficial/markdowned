@@ -61,14 +61,14 @@ onMounted(async () => {
 			></kor-button>
 			<kor-button
 				slot="functions"
-				label="Import"
+				:label="isMobile ? '' : 'Import'"
 				icon="file_upload"
 				color="secondary"
 				@click="importCode()"
 			></kor-button>
 			<kor-button
 				slot="functions"
-				label="Export"
+				:label="isMobile ? '' : 'Export'"
 				icon="file_download"
 				color="primary"
 				@click="exportCode()"

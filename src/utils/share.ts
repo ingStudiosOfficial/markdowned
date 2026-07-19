@@ -1,10 +1,8 @@
-import mime from 'mime';
-
 export async function shareMarkdown(code: string, filename: string) {
 	if (!('share' in navigator)) return;
 
 	const file = new File([code], filename, {
-		type: mime.getType(filename) || 'text/markdown',
+		type: 'text/plain', // DO NOT CHANGE THIS TO MARKDOWN IT WILL HAVE A NOTALLOWEDERROR IN WEB SHARE
 	});
 
 	const shareData: ShareData = {
